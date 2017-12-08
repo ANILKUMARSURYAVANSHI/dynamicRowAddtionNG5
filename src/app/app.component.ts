@@ -10,14 +10,8 @@ export class AppComponent implements OnInit{
   title = 'app works!';
 
   multiForm: FormGroup;
-  teamForm: FormGroup;
-  allTeamDetails = [{
 
-
-    'first_name': 'anil',
-    'last_name': 'kumar'
-  }
-  ];
+  
   personList = [
     {
       'fName': "Mark",
@@ -35,23 +29,14 @@ export class AppComponent implements OnInit{
   ]
 
   constructor(private formBuilder: FormBuilder) {
-    this.teamForm = this.formBuilder.group({
-      memberDetails: this.formBuilder.array([])
-    });
+   
     this.multiForm = this.formBuilder.group({
       userDetails: this.formBuilder.array([])
     });
   }
 
   ngOnInit() {
-    this.teamForm = this.formBuilder.group({
-      memberDetails: this.formBuilder.array(
-        this.allTeamDetails.map(x => this.formBuilder.group({
-          firstName: [x.first_name, [Validators.required, Validators.minLength(2)]],
-          lastName: [x.last_name, [Validators.required, Validators.minLength(2)]]
-        }))
-      )
-    });
+    
     this.multiForm = this.formBuilder.group({
       userDetails: this.formBuilder.array(
         this.personList.map(x => this.formBuilder.group({
@@ -67,14 +52,28 @@ export class AppComponent implements OnInit{
 
   onAdd(){
     console.log('11');
-    this.personList.push({
-      fName: "Anil",
-      lName: "kk",
-      UserName: "@anks"
-    })
+    // this.personList.push({
+    //   fName: "Anil",
+    //   lName: "kk",
+    //   UserName: "@anks"
+    // })
+
+    const steps = <FormArray>this.multiForm.controls['userDetails'];
+    steps.push(this.formBuilder.group({
+      firstName: ['muuu', [Validators.required, Validators.minLength(2)]],
+      lastName: ['aa', [Validators.required, Validators.minLength(2)]],
+      userName: ['test', [Validators.required, Validators.minLength(2)]]
+    }))
   }
   onDelete(index){
-    console.log('11');
-    this.personList.splice(index,1);
+    console.log(this.multiForm);
+    const steps = <FormArray>this.multiForm.controls['userDetails'];
+    
+    steps.removeAt(index);
+  }
+
+  sendData(){
+    console.log(this.multiForm.value);
+    this.personList = this.multiForm.value.userDetails;
   }
 }

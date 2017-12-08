@@ -15,12 +15,12 @@
     </tr>
   </thead>
   <tbody formArrayName="userDetails">
-    <tr   *ngFor="let single of personList; let $index=index" [formGroupName]="$index">
+    <tr   *ngFor="let single of multiForm.controls.userDetails.controls; let $index=index;" [formGroupName]="$index">
       <th scope="row">{{$index}}</th>
       <td><input type="text" class="form-control" formControlName="firstName"></td>
       <td><input type="text" class="form-control" formControlName="lastName"></td>
       <td><input type="text" class="form-control" formControlName="userName"></td>
-      <td><button (click)="onAdd();">Add +</button> <button (click)="onDelete(i);">Delete -</button></td>
+      <td><button *ngIf="$index==(multiForm.controls.userDetails.controls.length-1)" (click)="onAdd();">Add +</button> <button (click)="onDelete($index);">Delete -</button></td>
     </tr>
    
   </tbody>
@@ -28,22 +28,10 @@
 
 </form>
 
-
-<form [formGroup]="teamForm">
-  <!--Use formArray to create multiple, smaller forms'-->
-  <div formArrayName="memberDetails">
-    <div *ngFor="let single of allTeamDetails; let $index=index">
-      <div [formGroupName]="$index">
-        <div>
-          <!--your field properties of every repeated items-->
-          <input placeholder="First Name" type="text" formControlName="firstName" />
-        </div>
-        <div>
-          <input placeholder="Last Name" type="text" formControlName="lastName" />
-        </div>
-      </div>
-    </div>
-  </div>
-</form>
-
+<button class="btn btn-primary" type="button" (click)="sendData()">Send/ Show</button>
+<br>
+<hr>
+JSON Data
+<br>
+{{personList|json}}
 
